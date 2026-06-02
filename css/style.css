@@ -1,0 +1,6 @@
+/* Stock Monitor Pro v7 - css/style.css */
+/* Full file in stock-monitor-pro-v7.zip */
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,sans-serif;font-size:14px;color:#1a1a1a;background:#f5f5f7}
+:root{--color-text-primary:#1a1a1a;--color-background-primary:#fff;--color-background-secondary:#f5f5f7;--border-radius-md:8px;--border-radius-lg:12px;}
+.app{padding:.75rem 1rem;max-width:900px;margin:0 auto}

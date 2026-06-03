@@ -1,118 +1,860 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stock Monitor Pro - v7</title>
-<link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Sai Santosh Kumar Devarasetty | SAP S/4HANA & BTP ABAP Consultant · AI/ML Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+/* ═══════════════════════════════════════
+   WHITE + BLUE PROFESSIONAL PALETTE
+   Background  : #ffffff / #f4f7fb
+   Navy        : #0a1628
+   Blue        : #0057b8  (primary SAP)
+   Light Blue  : #e8f0fb  (cards/bg tint)
+   Accent Gold : #c98a1a  (SAP amber)
+   Text Dark   : #0a1628
+   Text Mid    : #3d5166
+   Text Light  : #6b8299
+   Border      : #dde6f0
+═══════════════════════════════════════ */
+:root{
+  --white:#ffffff;
+  --bg:#f4f7fb;
+  --bg2:#edf2f9;
+  --navy:#0a1628;
+  --navy2:#0f2044;
+  --blue:#0057b8;
+  --blue2:#0070d2;
+  --blue-light:#e8f0fb;
+  --blue-mid:#cdddf5;
+  --gold:#c98a1a;
+  --gold-light:#f0a830;
+  --teal:#007a9e;
+  --green:#1a7a40;
+  --text:#0a1628;
+  --text2:#3d5166;
+  --text3:#6b8299;
+  --border:#dde6f0;
+  --border2:#c5d4e8;
+  --shadow:0 2px 16px rgba(10,22,40,0.08);
+  --shadow-md:0 4px 32px rgba(10,22,40,0.12);
+  --shadow-lg:0 8px 48px rgba(10,22,40,0.16);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
+a{text-decoration:none;color:inherit}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--blue);border-radius:3px}
+
+/* ══ NAV ══ */
+nav{
+  position:fixed;top:0;width:100%;z-index:100;
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:0 5rem;height:64px;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 1px 12px rgba(10,22,40,0.06);
+  transition:box-shadow .3s;
+}
+nav.scrolled{box-shadow:var(--shadow-md)}
+.nav-logo{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;
+  color:var(--navy);letter-spacing:-.02em;
+}
+.nav-logo span{color:var(--blue)}
+.nav-links{display:flex;align-items:center;gap:2rem;list-style:none}
+.nav-links a{
+  font-size:.82rem;font-weight:500;color:var(--text2);
+  letter-spacing:.01em;transition:color .2s;
+  position:relative;padding:.2rem 0;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-2px;left:0;
+  width:0;height:2px;background:var(--blue);
+  border-radius:1px;transition:width .25s;
+}
+.nav-links a:hover{color:var(--blue)}
+.nav-links a:hover::after{width:100%}
+/* Contact chips in nav */
+.nav-contacts{display:flex;align-items:center;gap:.75rem}
+.nav-chip{
+  display:inline-flex;align-items:center;gap:.35rem;
+  padding:.3rem .75rem;border-radius:999px;
+  font-size:.72rem;font-weight:500;
+  border:1px solid var(--border2);color:var(--text2);
+  background:var(--white);transition:all .2s;
+}
+.nav-chip:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
+.nav-chip svg{flex-shrink:0}
+
+/* ══ HERO ══ */
+#hero{
+  min-height:100vh;
+  background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 55%,#0d2a5a 100%);
+  display:grid;grid-template-columns:1fr 1fr;
+  align-items:center;gap:4rem;
+  padding:7rem 5rem 5rem;
+  position:relative;overflow:hidden;
+}
+/* Subtle grid overlay */
+#hero::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:48px 48px;pointer-events:none;
+}
+/* Hero glow orb */
+#hero::after{
+  content:'';position:absolute;
+  right:-10%;top:-20%;
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,87,184,.18) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+  padding:.35rem 1rem;border-radius:999px;
+  font-size:.72rem;font-weight:500;color:rgba(255,255,255,.8);
+  letter-spacing:.06em;text-transform:uppercase;
+  margin-bottom:1.4rem;
+  animation:fadeUp .6s ease both;
+}
+.hero-eyebrow::before{
+  content:'';width:7px;height:7px;border-radius:50%;
+  background:#4ade80;box-shadow:0 0 8px #4ade80;
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-name{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(2.8rem,4.5vw,4.2rem);
+  line-height:1.05;letter-spacing:-.03em;
+  animation:fadeUp .7s ease .08s both;
+}
+.hero-name .line1{color:rgba(255,255,255,.95)}
+.hero-name .line2{
+  background:linear-gradient(135deg,#60a5fa,#93c5fd);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero-name .line3{
+  background:linear-gradient(135deg,#fbbf24,#f59e0b);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero-title-tag{
+  margin-top:.8rem;
+  font-size:1.05rem;font-weight:600;
+  color:rgba(255,255,255,.6);letter-spacing:.01em;
+  animation:fadeUp .7s ease .14s both;
+}
+.hero-sub{
+  margin-top:1.2rem;font-size:.97rem;line-height:1.8;
+  color:rgba(255,255,255,.55);max-width:480px;
+  animation:fadeUp .7s ease .2s both;
+}
+/* Stats row */
+.hero-stats{
+  margin-top:2rem;display:flex;gap:2.5rem;
+  animation:fadeUp .7s ease .26s both;
+}
+.stat-val{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:2.2rem;
+  color:#ffffff;line-height:1;
+}
+.stat-val span{color:#60a5fa;}
+.stat-lbl{font-size:.7rem;font-weight:600;color:rgba(255,255,255,.4);letter-spacing:.1em;text-transform:uppercase;margin-top:.2rem}
+/* CTA buttons */
+.hero-cta{
+  margin-top:2rem;display:flex;gap:.9rem;flex-wrap:wrap;
+  animation:fadeUp .7s ease .32s both;
+}
+.btn-solid{
+  padding:.75rem 1.8rem;border-radius:8px;
+  background:var(--blue2);color:#fff;
+  font-size:.85rem;font-weight:600;letter-spacing:.02em;
+  border:none;cursor:pointer;
+  transition:transform .2s,box-shadow .2s,background .2s;
+  display:inline-flex;align-items:center;gap:.5rem;
+}
+.btn-solid:hover{background:#0065c0;transform:translateY(-1px);box-shadow:0 6px 24px rgba(0,112,210,.35)}
+.btn-outline{
+  padding:.75rem 1.8rem;border-radius:8px;
+  border:1px solid rgba(255,255,255,.25);
+  color:rgba(255,255,255,.8);background:transparent;
+  font-size:.85rem;font-weight:500;letter-spacing:.02em;
+  cursor:pointer;transition:all .2s;
+  display:inline-flex;align-items:center;gap:.5rem;
+}
+.btn-outline:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.45)}
+/* Hero contact mini-strip */
+.hero-contact-strip{
+  margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap;
+  animation:fadeUp .7s ease .38s both;
+}
+.hcs-link{
+  display:inline-flex;align-items:center;gap:.4rem;
+  font-size:.78rem;font-weight:500;color:rgba(255,255,255,.5);
+  transition:color .2s;
+}
+.hcs-link:hover{color:rgba(255,255,255,.9)}
+/* Hero visual */
+.hero-visual{
+  display:flex;align-items:center;justify-content:center;
+  position:relative;z-index:1;
+  animation:fadeUp .8s ease .15s both;
+}
+.photo-frame{
+  width:320px;height:320px;border-radius:24px;
+  position:relative;overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.1);
+}
+.photo-frame img{
+  width:100%;height:100%;object-fit:cover;object-position:center top;
+  filter:brightness(1.05) contrast(1.02);
+}
+/* Floating skill chips around photo */
+.skill-bubble{
+  position:absolute;background:rgba(255,255,255,.95);
+  border-radius:10px;padding:.4rem .85rem;
+  font-size:.7rem;font-weight:600;color:var(--navy);
+  box-shadow:var(--shadow-md);white-space:nowrap;
+  animation:floatY ease-in-out infinite;
+  border:1px solid var(--border);
+}
+.sb1{top:-16px;right:-20px;animation-duration:5s;animation-delay:0s;color:var(--blue);border-color:var(--blue-mid)}
+.sb2{bottom:30px;right:-24px;animation-duration:6s;animation-delay:-2s;color:#b45309;border-color:#fde68a}
+.sb3{top:40%;left:-28px;animation-duration:7s;animation-delay:-1s;color:var(--teal);border-color:#b2e0ee}
+.sb4{bottom:-16px;left:20px;animation-duration:5.5s;animation-delay:-3s;color:var(--green);border-color:#bbf7d0}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* ══ SECTION SHELL ══ */
+.section-wrap{padding:6rem 5rem;position:relative}
+.section-wrap.alt{background:var(--white)}
+.section-wrap.dark{background:var(--navy);color:#fff}
+.sec-label{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-size:.7rem;font-weight:700;color:var(--blue);
+  letter-spacing:.14em;text-transform:uppercase;margin-bottom:.6rem;
+}
+.sec-label::before{content:'';width:20px;height:2px;background:var(--blue);border-radius:1px}
+.sec-title{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(1.8rem,2.8vw,2.6rem);
+  letter-spacing:-.025em;color:var(--navy);line-height:1.1;
+  margin-bottom:.5rem;
+}
+.section-wrap.dark .sec-title{color:#fff}
+.sec-sub{font-size:.95rem;color:var(--text2);max-width:600px;margin-bottom:2.5rem}
+.sec-divider{width:40px;height:3px;background:linear-gradient(90deg,var(--blue),var(--teal));border-radius:2px;margin:.6rem 0 2.5rem}
+.featured-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem}
+.featured-full{grid-column:1/-1}
+.proj-card{background:var(--white);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:transform .25s,box-shadow .25s,border-color .25s;position:relative;}
+.proj-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--blue-mid)}
+.proj-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--teal));opacity:0;transition:opacity .25s;}
+.proj-card:hover::before{opacity:1}
+.proj-card.featured::before{opacity:1;background:linear-gradient(90deg,var(--blue),#60a5fa)}
+.proj-card.ai-proj::before{opacity:1;background:linear-gradient(90deg,var(--gold),#f59e0b)}
+.proj-banner{height:160px;overflow:hidden;background:var(--navy);position:relative}
+.banner-svg{width:100%;height:100%;display:block}
+.proj-body{padding:1.6rem}
+.proj-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;flex-wrap:wrap;gap:.5rem}
+.proj-cat{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);}
+.proj-cat.ai{color:var(--gold)}
+.proj-cat.hybrid{color:var(--teal)}
+.gh-btn{display:inline-flex;align-items:center;gap:.35rem;background:var(--blue-light);border:1px solid var(--blue-mid);padding:.25rem .7rem;border-radius:999px;font-size:.65rem;font-weight:600;color:var(--blue);transition:all .2s;}
+.gh-btn:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
+.proj-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem}
+.psi{display:flex;flex-direction:column;gap:.5rem;margin:.8rem 0}
+.psi-row{display:grid;grid-template-columns:70px 1fr;gap:.5rem;align-items:start}
+.psi-label{font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .5rem;border-radius:4px;text-align:center;margin-top:.1rem;}
+.psi-label.problem{background:#fef2f2;color:#b91c1c}
+.psi-label.solution{background:var(--blue-light);color:var(--blue)}
+.psi-label.impact{background:#f0fdf4;color:#15803d}
+.psi-text{font-size:.83rem;color:var(--text2);line-height:1.55}
+.proj-metrics{display:flex;gap:.6rem;flex-wrap:wrap;margin:.8rem 0}
+.metric-tag{font-size:.68rem;font-weight:600;padding:.25rem .7rem;border-radius:999px;}
+.metric-tag.blue{background:var(--blue-light);color:var(--blue);border:1px solid var(--blue-mid)}
+.metric-tag.green{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
+.metric-tag.gold{background:#fffbeb;color:#b45309;border:1px solid #fde68a}
+.metric-tag.teal{background:#f0f9ff;color:var(--teal);border:1px solid #bae6fd}
+.proj-stack{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.8rem}
+.stk-tag{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:500;padding:.22rem .55rem;border-radius:5px;background:var(--bg);border:1px solid var(--border);color:var(--text3);}
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem}
+.skill-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1.6rem;transition:border-color .25s,box-shadow .25s,transform .25s;}
+.skill-card:hover{border-color:var(--blue-mid);box-shadow:var(--shadow);transform:translateY(-2px)}
+.sk-header{display:flex;align-items:center;gap:.7rem;margin-bottom:1.2rem}
+.sk-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:var(--blue-light);border:1px solid var(--blue-mid);flex-shrink:0;}
+.sk-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:var(--navy)}
+.sk-sublabel{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin:.9rem 0 .4rem;}
+.sk-sublabel.gold{color:var(--gold)}
+.sk-sublabel.teal{color:var(--teal)}
+.sk-sublabel.green{color:var(--green)}
+.tag-cloud{display:flex;flex-wrap:wrap;gap:.4rem}
+.sk-tag{font-family:'JetBrains Mono',monospace;font-size:.63rem;padding:.25rem .6rem;border-radius:5px;background:var(--bg);border:1px solid var(--border);color:var(--text3);}
+.sk-tag.hi{background:var(--blue-light);border-color:var(--blue-mid);color:var(--blue);font-weight:600}
+.sk-tag.hi-gold{background:#fffbeb;border-color:#fde68a;color:#b45309;font-weight:600}
+.sk-tag.hi-teal{background:#f0f9ff;border-color:#bae6fd;color:var(--teal);font-weight:600}
+.timeline{position:relative;padding-left:2rem}
+.timeline::before{content:'';position:absolute;left:7px;top:6px;bottom:0;width:2px;background:linear-gradient(to bottom,var(--blue),var(--teal),transparent);border-radius:1px;}
+.tl-item{position:relative;margin-bottom:2.8rem}
+.tl-dot{position:absolute;left:-2rem;top:5px;width:16px;height:16px;border-radius:50%;background:var(--white);border:2.5px solid var(--blue);box-shadow:0 0 0 3px var(--blue-light);}
+.tl-dot.gold{border-color:var(--gold);box-shadow:0 0 0 3px #fffbeb}
+.tl-dot.teal{border-color:var(--teal);box-shadow:0 0 0 3px #f0f9ff}
+.tl-role{font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;color:var(--navy)}
+.tl-company{font-size:.85rem;font-weight:500;color:var(--blue);margin:.15rem 0}
+.tl-period{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.65rem;background:var(--blue-light);border:1px solid var(--blue-mid);color:var(--blue);padding:.18rem .6rem;border-radius:999px;margin-bottom:.8rem;}
+.tl-note{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text3);margin:.15rem 0 .6rem}
+.tl-card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:1.4rem;transition:border-color .2s;}
+.tl-card:hover{border-color:var(--blue-mid)}
+.tl-list{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.tl-list li{padding-left:1rem;position:relative;font-size:.87rem;color:var(--text2);line-height:1.65;}
+.tl-list li::before{content:'▸';position:absolute;left:0;color:var(--blue);font-size:.75rem;top:.15rem}
+.tl-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.9rem}
+.tl-tag{font-family:'JetBrains Mono',monospace;font-size:.6rem;padding:.18rem .5rem;border-radius:4px;background:var(--blue-light);border:1px solid var(--blue-mid);color:var(--blue);}
+.certs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem}
+.cert-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;display:flex;align-items:flex-start;gap:.9rem;transition:border-color .2s,transform .2s,box-shadow .2s;}
+.cert-card:hover{border-color:var(--blue);transform:translateX(3px);box-shadow:var(--shadow)}
+.cert-icon{width:36px;height:36px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.cert-icon.sap{background:var(--blue-light);border:1px solid var(--blue-mid)}
+.cert-icon.ai{background:#fffbeb;border:1px solid #fde68a}
+.cert-icon.data{background:#f0f9ff;border:1px solid #bae6fd}
+.cert-name{font-weight:600;font-size:.87rem;color:var(--navy);line-height:1.35}
+.cert-issuer{font-size:.75rem;color:var(--blue);margin-top:.15rem;font-weight:500}
+.cert-year{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text3);margin-top:.1rem}
+
+/* ══ EDUCATION ══ */
+.edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
+.edu-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:2rem;position:relative;overflow:hidden;transition:border-color .25s,box-shadow .25s;}
+.edu-card:hover{border-color:var(--blue);box-shadow:var(--shadow-md)}
+.edu-badge{display:inline-block;background:var(--blue-light);border:1px solid var(--blue-mid);padding:.25rem .75rem;border-radius:999px;font-size:.65rem;font-weight:700;color:var(--blue);letter-spacing:.06em;text-transform:uppercase;margin-bottom:1rem;}
+.edu-degree{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;color:var(--navy);margin-bottom:.35rem}
+.edu-uni{font-size:.88rem;color:var(--text2);margin-bottom:.25rem;font-weight:500}
+.edu-year{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--blue);font-weight:600}
+.edu-decor{position:absolute;bottom:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,var(--blue-light),transparent 70%);}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:start}
+.contact-links{display:flex;flex-direction:column;gap:.9rem}
+.contact-item{display:flex;align-items:center;gap:.9rem;background:var(--bg);border:1px solid var(--border);padding:.9rem 1.2rem;border-radius:12px;transition:border-color .2s,transform .2s,box-shadow .2s;color:var(--text);}
+.contact-item:hover{border-color:var(--blue);transform:translateX(3px);box-shadow:var(--shadow)}
+.ci-icon{width:36px;height:36px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--blue-light);border:1px solid var(--blue-mid);}
+.ci-label{font-size:.65rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em}
+.ci-val{font-size:.88rem;font-weight:500;color:var(--navy)}
+.contact-form{display:flex;flex-direction:column;gap:.9rem}
+.form-group{display:flex;flex-direction:column;gap:.38rem}
+.form-label{font-size:.72rem;font-weight:600;color:var(--text2);letter-spacing:.04em}
+.form-input{background:var(--white);border:1.5px solid var(--border);border-radius:9px;padding:.75rem 1rem;color:var(--text);font-family:'Inter',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s,box-shadow .2s;resize:vertical;}
+.form-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,87,184,.1)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+#form-status{font-family:'JetBrains Mono',monospace;font-size:.75rem;padding:.55rem .9rem;border-radius:8px;display:none}
+#form-status.success{background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d;display:block}
+#form-status.error{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;display:block}
+#form-status.sending{background:var(--blue-light);border:1px solid var(--blue-mid);color:var(--blue);display:block}
+.btn-submit{padding:.8rem 2rem;border-radius:8px;background:var(--blue2);color:#fff;font-size:.88rem;font-weight:600;letter-spacing:.02em;border:none;cursor:pointer;width:100%;transition:background .2s,transform .2s,box-shadow .2s;}
+.btn-submit:hover{background:#0065c0;transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,112,210,.3)}
+footer{background:var(--navy);color:rgba(255,255,255,.6);padding:2rem 5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;border-top:1px solid rgba(255,255,255,.06);}
+.footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#fff}
+.footer-logo span{color:#60a5fa}
+.footer-copy{font-size:.75rem}
+.footer-links{display:flex;gap:1.4rem}
+.footer-links a{font-size:.82rem;color:rgba(255,255,255,.5);transition:color .2s}
+.footer-links a:hover{color:#fff}
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .65s ease,transform .65s ease}
+.reveal.visible{opacity:1;transform:none}
+@media(max-width:960px){
+  nav{padding:0 1.5rem}
+  .nav-links,.nav-contacts{display:none}
+  #hero{grid-template-columns:1fr;padding:6rem 1.5rem 3rem;gap:2.5rem}
+  .photo-frame{width:240px;height:240px}
+  .section-wrap{padding:4rem 1.5rem}
+  .featured-grid,.edu-grid,.contact-grid{grid-template-columns:1fr}
+  footer{padding:1.8rem 1.5rem;flex-direction:column;text-align:center}
+}
+</style>
 </head>
 <body>
-<div class="app">
-<div class="topbar">
-  <div>
-    <div class="appname">Stock Monitor Pro <span class="livebadge" id="lb" style="background:#e1f5ee;color:#0f6e56">Live</span></div>
-    <div class="appsub" id="lastupdated">Live data - Apify scrape - Yahoo Finance - LM Studio AI - EmailJS</div>
+
+<!-- ══ NAV ══ -->
+<nav id="mainNav">
+  <div class="nav-logo">Santosh<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#certifications">Certs</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-contacts">
+    <a class="nav-chip" href="mailto:dsaisantoshkumar@gmail.com">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" stroke="#3d5166" stroke-width="1.5"/><polyline points="1,5 8,10 15,5" stroke="#3d5166" stroke-width="1.5" fill="none"/></svg>
+      Email
+    </a>
+    <a class="nav-chip" href="https://linkedin.com/in/santosh29" target="_blank">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="14" height="14" rx="3" stroke="#3d5166" stroke-width="1.5"/><line x1="5" y1="7" x2="5" y2="12" stroke="#3d5166" stroke-width="1.5"/><line x1="5" y1="4.5" x2="5" y2="4.5" stroke="#3d5166" stroke-width="2.5" stroke-linecap="round"/><path d="M8 7v5M8 9c0-1.2 5-1.5 5 0v3" stroke="#3d5166" stroke-width="1.5"/></svg>
+      LinkedIn
+    </a>
+    <a class="nav-chip" href="https://github.com/dsaisantoshkumar" target="_blank">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 1C4.1 1 1 4.1 1 8c0 3.1 2 5.7 4.8 6.6.3.1.4-.1.4-.3v-1.1c-1.8.4-2.2-.9-2.2-.9-.3-.8-.8-1-1-.1-.6-.4 0-.4 0-.4.7.1 1 .7 1 .7.6 1 1.6.7 2 .5.1-.4.2-.7.4-.9-1.5-.2-3.2-.8-3.2-3.5 0-.8.3-1.4.7-1.9-.1-.2-.3-.9.1-1.8 0 0 .6-.2 2 .7.6-.2 1.2-.3 1.8-.3s1.2.1 1.8.3c1.4-.9 2-.7 2-.7.4.9.2 1.6.1 1.8.4.5.7 1.1.7 1.9 0 2.7-1.6 3.3-3.2 3.5.3.2.5.7.5 1.4v2.1c0 .2.1.4.4.3C13 13.7 15 11.1 15 8c0-3.9-3.1-7-7-7z" fill="#3d5166"/></svg>
+      GitHub
+    </a>
   </div>
-  <div class="navrow">
-    <button class="ntab on" onclick="showSec('dash',this)">Dashboard</button>
-    <button class="ntab" onclick="showSec('port',this)">Portfolio</button>
-    <button class="ntab" onclick="showSec('alerts',this)">Alerts</button>
-    <button class="ntab" onclick="showSec('news',this)">News</button>
-    <button class="ntab" onclick="showSec('ai',this)">AI Chat</button>
-    <button class="ntab" onclick="showSec('settings',this)">Settings</button>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">Available for new opportunities</div>
+    <h1 class="hero-name">
+      <span class="line1">Sai Santosh</span>
+      <span class="line2">Kumar</span>
+      <span class="line3">Devarasetty</span>
+    </h1>
+    <p class="hero-title-tag">SAP S/4HANA &amp; BTP ABAP Consultant &nbsp;·&nbsp; AI/ML Engineer</p>
+    <p class="hero-sub">Over 5 years of experience building enterprise SAP solutions with clean-core principles on SAP BTP. I work across RAP, OData APIs and RICEF on the SAP side, and build ML pipelines using Python and TensorFlow for clients in retail, healthcare and finance.</p>
+    <div class="hero-stats">
+      <div><div class="stat-val">5<span>+</span></div><div class="stat-lbl">Years Exp.</div></div>
+      <div><div class="stat-val">18<span>+</span></div><div class="stat-lbl">Projects</div></div>
+      <div><div class="stat-val">9<span>+</span></div><div class="stat-lbl">Certs</div></div>
+    </div>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-solid">View Projects →</a>
+      <a href="#contact" class="btn-outline">Get In Touch</a>
+    </div>
+    <div class="hero-contact-strip">
+      <a class="hcs-link" href="mailto:dsaisantoshkumar@gmail.com">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.4"/><polyline points="1,5 8,10 15,5" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+        dsaisantoshkumar@gmail.com
+      </a>
+      <a class="hcs-link" href="tel:6019131606">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 1.5h2.5L7 5 5.5 6.5c.8 1.8 2.2 3.2 4 4L11 9l3.5 1.5V13a1.5 1.5 0 01-1.5 1.5C5.5 14.5 1.5 10.5 1.5 4A1.5 1.5 0 013 2.5z" stroke="currentColor" stroke-width="1.4"/></svg>
+        601-913-1606
+      </a>
+      <a class="hcs-link" href="https://linkedin.com/in/santosh29" target="_blank">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="14" height="14" rx="3" stroke="currentColor" stroke-width="1.4"/><line x1="4.5" y1="6.5" x2="4.5" y2="12" stroke="currentColor" stroke-width="1.4"/><circle cx="4.5" cy="4.5" r="1" fill="currentColor"/><path d="M7.5 6.5v5.5M7.5 9c0-1.5 5.5-2 5.5 0v3" stroke="currentColor" stroke-width="1.4"/></svg>
+        linkedin.com/in/santosh29
+      </a>
+      <a class="hcs-link" href="https://github.com/dsaisantoshkumar" target="_blank">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1C4.1 1 1 4.1 1 8c0 3.1 2 5.7 4.8 6.6.3.1.4-.1.4-.3v-1.1c-1.8.4-2.2-.9-2.2-.9-.3-.8-.8-1-1-.1-.6-.4 0-.4 0-.4.7.1 1 .7 1 .7.6 1 1.6.7 2 .5.1-.4.2-.7.4-.9-1.5-.2-3.2-.8-3.2-3.5 0-.8.3-1.4.7-1.9-.1-.2-.3-.9.1-1.8 0 0 .6-.2 2 .7.6-.2 1.2-.3 1.8-.3s1.2.1 1.8.3c1.4-.9 2-.7 2-.7.4.9.2 1.6.1 1.8.4.5.7 1.1.7 1.9 0 2.7-1.6 3.3-3.2 3.5.3.2.5.7.5 1.4v2.1c0 .2.1.4.4.3C13 13.7 15 11.1 15 8c0-3.9-3.1-7-7-7z" fill="currentColor"/></svg>
+        github.com/dsaisantoshkumar
+      </a>
+      <span class="hcs-link">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M8 2C8 2 5.5 5 5.5 8s2.5 6 2.5 6" stroke="currentColor" stroke-width="1" stroke-opacity=".5"/><line x1="2" y1="8" x2="14" y2="8" stroke="currentColor" stroke-width="1.4"/></svg>
+        Bentonville, AR, USA
+      </span>
+    </div>
   </div>
-</div>
-<div id="sec-dash" class="sec on">
-  <div class="mgrid" id="dm"></div>
-  <div class="card">
-    <div class="hdr">
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-        <span id="cl" style="font-size:13px;font-weight:500">--</span>
-        <span id="cbadge" class="badge b-nu">--</span>
-        <button class="btn-s" onclick="fetchLive()">Refresh</button>
-        <button class="btn-s" onclick="openDetail()">Detail view</button>
+  <div class="hero-visual">
+    <div class="photo-frame">
+      <img src="https://api.dicebear.com/7.x/initials/svg?seed=Sai+Santosh&backgroundColor=0057b8&textColor=ffffff&fontSize=40" alt="Sai Santosh Kumar"/>
+    </div>
+    <div class="skill-bubble sb1">SAP BTP · Clean Core</div>
+    <div class="skill-bubble sb2">RAP · OData V4</div>
+    <div class="skill-bubble sb3">TensorFlow · Keras</div>
+    <div class="skill-bubble sb4">Python · Scikit-learn</div>
+  </div>
+</section>
+
+<!-- ══ SKILLS ══ -->
+<section id="skills" class="section-wrap alt">
+  <div class="reveal">
+    <div class="sec-label">01 · Technical Arsenal</div>
+    <h2 class="sec-title">Skills &amp; Technologies</h2>
+    <div class="sec-divider"></div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-card reveal">
+      <div class="sk-header">
+        <div class="sk-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L18 10L10 18L2 10Z" fill="none" stroke="#0057b8" stroke-width="1.8"/><path d="M10 5L15 10L10 15L5 10Z" fill="#0057b8" fill-opacity=".15"/><circle cx="10" cy="10" r="2" fill="#0057b8"/></svg></div>
+        <div class="sk-title">SAP &amp; Enterprise</div>
       </div>
-      <div class="tfs">
-        <button class="tf on" onclick="setTF('1D',this)">1D</button>
-        <button class="tf" onclick="setTF('1W',this)">1W</button>
-        <button class="tf" onclick="setTF('1M',this)">1M</button>
-        <button class="btn-s" onclick="testTick()">Test tick</button>
+      <div class="sk-sublabel">Frameworks &amp; Cloud</div>
+      <div class="tag-cloud">
+        <span class="sk-tag hi">SAP BTP ABAP Env.</span><span class="sk-tag hi">RAP</span><span class="sk-tag hi">Clean Core</span>
+        <span class="sk-tag">CDS Views</span><span class="sk-tag">SAP Fiori / UI5</span><span class="sk-tag">S/4HANA</span>
+      </div>
+      <div class="sk-sublabel">Core ABAP &amp; Integration</div>
+      <div class="tag-cloud">
+        <span class="sk-tag">OO-ABAP</span><span class="sk-tag">AMDP</span><span class="sk-tag">OData V2/V4</span>
+        <span class="sk-tag">RICEFW</span><span class="sk-tag">BDEF</span><span class="sk-tag">BAPIs/BADIs</span>
+        <span class="sk-tag">Adobe Forms</span><span class="sk-tag">SAP Scripts</span><span class="sk-tag">DDIC · TMG</span>
+      </div>
+      <div class="sk-sublabel">Debugging &amp; Performance</div>
+      <div class="tag-cloud">
+        <span class="sk-tag hi">ST05</span><span class="sk-tag hi">SE30 · SAT</span><span class="sk-tag hi">ST22</span>
+        <span class="sk-tag">Eclipse ADT</span><span class="sk-tag">HANA Pushdown</span><span class="sk-tag">Code Inspector</span>
       </div>
     </div>
-    <div class="stabs" id="stabs"></div>
-    <div class="chartw"><canvas id="pc"></canvas></div>
-    <div id="verdict" class="verdict v-hold"><div class="vtitle">Loading...</div><div class="vbody"></div></div>
-    <div class="srow" id="srow"></div>
-    <div class="igrid" id="igrid"></div>
-  </div>
-</div>
-<div id="sec-port" class="sec">
-  <div class="mgrid" id="pm"></div>
-  <div class="card">
-    <div class="hdr"><span class="htitle">My positions</span><button class="btn-s" onclick="toggleEl('apf')">+ Add position</button></div>
-    <div id="apf" style="display:none;margin-bottom:10px">
-      <div class="row">
-        <div class="ig"><span class="il">Stock</span><select id="ps"></select></div>
-        <div class="ig"><span class="il">Shares</span><input type="number" id="psh" placeholder="10" min="1"></div>
-        <div class="ig"><span class="il">Buy price</span><input type="number" id="pbp" placeholder="250" step="0.01"></div>
-        <button class="btn" style="margin-top:14px" onclick="addPos()">Add</button>
+    <div class="skill-card reveal">
+      <div class="sk-header">
+        <div class="sk-icon" style="background:#fffbeb;border-color:#fde68a"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="4" cy="10" r="2" fill="#c98a1a" opacity=".8"/><circle cx="10" cy="4" r="2" fill="#c98a1a" opacity=".8"/><circle cx="10" cy="16" r="2" fill="#c98a1a" opacity=".8"/><circle cx="16" cy="10" r="2" fill="#c98a1a" opacity=".8"/><circle cx="10" cy="10" r="2.5" fill="#c98a1a"/><line x1="6" y1="10" x2="7.5" y2="10" stroke="#c98a1a" stroke-width="1.2" opacity=".5"/><line x1="12.5" y1="10" x2="14" y2="10" stroke="#c98a1a" stroke-width="1.2" opacity=".5"/><line x1="10" y1="6" x2="10" y2="7.5" stroke="#c98a1a" stroke-width="1.2" opacity=".5"/><line x1="10" y1="12.5" x2="10" y2="14" stroke="#c98a1a" stroke-width="1.2" opacity=".5"/></svg></div>
+        <div class="sk-title">AI &amp; Machine Learning</div>
+      </div>
+      <div class="sk-sublabel gold">Algorithms &amp; Models</div>
+      <div class="tag-cloud">
+        <span class="sk-tag hi-gold">CNN / RNN / LSTM</span><span class="sk-tag hi-gold">Anomaly Detection</span>
+        <span class="sk-tag">NLP / TF-IDF</span><span class="sk-tag">Decision Trees</span><span class="sk-tag">Naive Bayes</span>
+      </div>
+      <div class="sk-sublabel gold">Frameworks &amp; Viz</div>
+      <div class="tag-cloud">
+        <span class="sk-tag">TensorFlow</span><span class="sk-tag">Keras</span><span class="sk-tag">Scikit-learn</span>
+        <span class="sk-tag">Pandas</span><span class="sk-tag">NumPy</span><span class="sk-tag">Matplotlib</span><span class="sk-tag">Power BI</span>
       </div>
     </div>
-    <div id="plist"></div>
-  </div>
-  <div class="card"><div class="htitle" style="margin-bottom:10px">Allocation</div><div class="chartw" style="height:180px"><canvas id="piec"></canvas></div></div>
-</div>
-<div id="sec-alerts" class="sec">
-  <div class="card">
-    <div class="hdr"><span class="htitle">Create alert</span><span class="badge b-up" style="font-size:10px">service_3rss6un</span></div>
-    <div class="row">
-      <div class="ig"><span class="il">Stock</span><select id="as"></select></div>
-      <div class="ig"><span class="il">Alert type</span><select id="at"><option value="below">Price drops below</option><option value="above">Price rises above</option><option value="pctdrop">% drop in a day</option><option value="critical">Critical low</option><option value="rsi_low">Oversold (auto)</option><option value="rsi_high">Overbought (auto)</option></select></div>
-      <div class="ig"><span class="il">Value</span><input type="number" id="av" placeholder="249" step="0.01"></div>
+    <div class="skill-card reveal">
+      <div class="sk-header">
+        <div class="sk-icon" style="background:#f0f9ff;border-color:#bae6fd"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="7" width="7" height="5" rx="1.5" fill="none" stroke="#007a9e" stroke-width="1.5"/><rect x="11" y="8" width="7" height="5" rx="1.5" fill="none" stroke="#007a9e" stroke-width="1.5"/><line x1="9" y1="9.5" x2="11" y2="10.5" stroke="#007a9e" stroke-width="1.2" opacity=".7"/><circle cx="10" cy="10" r="1" fill="#007a9e"/></svg></div>
+        <div class="sk-title">Integration &amp; APIs</div>
+      </div>
+      <div class="sk-sublabel teal">Interfaces</div>
+      <div class="tag-cloud">
+        <span class="sk-tag hi-teal">REST APIs</span><span class="sk-tag hi-teal">SAP Gateway</span>
+        <span class="sk-tag">OData V2/V4</span><span class="sk-tag">Postman</span><span class="sk-tag">JSON/XML</span>
+        <span class="sk-tag">SLT Replication</span><span class="sk-tag">BDC / LSMW</span>
+      </div>
     </div>
-    <div class="row">
-      <div class="ig"><span class="il">Your name</span><input type="text" id="an" placeholder="Sai Santosh"></div>
-      <div class="ig"><span class="il">Email</span><input type="email" id="ae" placeholder="saisantoshkumar29@gmail.com"></div>
-      <button class="btn" onclick="addAlert()">Add alert</button>
+    <div class="skill-card reveal">
+      <div class="sk-header">
+        <div class="sk-icon" style="background:#f0fdf4;border-color:#bbf7d0"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 16L9 11" stroke="#1a7a40" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="9" r="4" fill="none" stroke="#1a7a40" stroke-width="1.5"/><path d="M15 6L17 4" stroke="#1a7a40" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="sk-title">Tools &amp; Platforms</div>
+      </div>
+      <div class="tag-cloud">
+        <span class="sk-tag">Python</span><span class="sk-tag">SQL</span><span class="sk-tag">JavaScript</span>
+        <span class="sk-tag">Git / GitHub</span><span class="sk-tag">SAP BTP</span><span class="sk-tag">AWS</span>
+        <span class="sk-tag">Azure DevOps</span><span class="sk-tag">VS Code</span><span class="sk-tag">Jira / Rally</span>
+      </div>
     </div>
-    <hr class="divider">
-    <div class="htitle" style="margin-bottom:6px">Active alerts</div>
-    <div class="alist" id="alist"></div>
   </div>
-  <div class="card"><div class="hdr"><span class="htitle">Notification log</span><button class="btn-s" onclick="clearLog()">Clear</button></div><div class="loglist" id="loglist"></div></div>
-</div>
-<div id="sec-news" class="sec">
-  <div class="mgrid" id="sentm"></div>
-  <div class="card">
-    <div class="hdr">
-      <div><span class="htitle">Live news</span><span id="newsDate" style="font-size:10px;color:var(--color-text-secondary);margin-left:6px"></span><div style="font-size:10px;color:var(--color-text-secondary)">Apify - Yahoo Finance - X/Twitter - CNBC</div></div>
-      <div style="display:flex;gap:6px"><select id="nf" onchange="renderNews()"><option value="ALL">All stocks</option></select><button class="btn-s" onclick="fetchApifyNews()">Scrape Apify</button><button class="btn-s" onclick="renderNews()">Refresh</button></div>
+</section>
+
+<!-- ══ EXPERIENCE ══ -->
+<section id="experience" class="section-wrap">
+  <div class="reveal">
+    <div class="sec-label">02 · Career Journey</div>
+    <h2 class="sec-title">Work Experience</h2>
+    <div class="sec-divider"></div>
+  </div>
+  <div class="timeline">
+    <div class="tl-item reveal">
+      <div class="tl-dot"></div>
+      <div class="tl-role">SAP S/4HANA ABAP Consultant</div>
+      <div class="tl-company">CVS Health — Phoenix, AZ</div>
+      <div class="tl-period">Jan 2025 – Jan 2026</div>
+      <div class="tl-card">
+        <ul class="tl-list">
+          <li>Architected configurable data retention solutions (TVARVC) and scalable data separation strategies for high-volume payment systems processing <strong style="color:var(--blue)">1B+ records</strong>, applying clean-core principles on SAP BTP ABAP Environment</li>
+          <li>Engineered CDS Views with input parameters, AMDP procedures, and HANA-optimized ALV reports using code pushdown, which reduced report runtime by <strong style="color:var(--blue)">83%</strong></li>
+          <li>Exposed OData V2/V4 services via SEGW and RAP for SAP Fiori apps; built outbound RPS interfaces with parallel processing delivering <strong style="color:var(--blue)">65% faster posting</strong></li>
+          <li>Led ECC to S/4HANA migration including code remediation, clean-core compliance review, and SLT replication to GCP across DEV/QAS/PRD</li>
+        </ul>
+        <div class="tl-tags"><span class="tl-tag">SAP BTP</span><span class="tl-tag">Clean Core</span><span class="tl-tag">RAP</span><span class="tl-tag">CDS Views</span><span class="tl-tag">OData V4</span><span class="tl-tag">AMDP</span><span class="tl-tag">SLT</span><span class="tl-tag">Fiori</span></div>
+      </div>
     </div>
-    <div id="apify-status" style="font-size:11px;padding:6px 0;color:var(--color-text-secondary)"></div>
-    <div id="nlist" style="max-height:500px;overflow-y:auto"></div>
+    <div class="tl-item reveal">
+      <div class="tl-dot teal"></div>
+      <div class="tl-role">SAP ABAP RAP Developer</div>
+      <div class="tl-company">Cloudninetek LLC — Charlotte, NC</div>
+      <div class="tl-period">Feb 2023 – Jan 2025</div>
+      <div class="tl-card">
+        <ul class="tl-list">
+          <li>Built scalable RAP applications with Business Objects, BDEF, validations, determinations, and side effects for Finance, Procurement, and SCM modules</li>
+          <li>Designed annotated CDS Views and Fiori Elements apps; exposed OData V2/V4 via RAP and integrated SAP with non-SAP systems via REST</li>
+          <li>Developed Smart Forms, SAP Scripts, and role-based authorization checks across DEV/QA/PRD landscapes</li>
+        </ul>
+        <div class="tl-tags"><span class="tl-tag">RAP · BDEF</span><span class="tl-tag">Fiori Elements</span><span class="tl-tag">Smart Forms</span><span class="tl-tag">REST</span><span class="tl-tag">Git</span></div>
+      </div>
+    </div>
+    <div class="tl-item reveal">
+      <div class="tl-dot gold"></div>
+      <div class="tl-role">SAP ABAP Developer</div>
+      <div class="tl-company">Cognizant Technology Solutions — India</div>
+      <div class="tl-period">Feb 2021 – Jul 2022</div>
+      <div class="tl-note">Feb–Jul 2021: Program Trainee (SAP onboarding) · Aug 2021: Promoted to SAP ABAP Developer</div>
+      <div class="tl-card">
+        <ul class="tl-list">
+          <li>Developed custom DDIC objects, Table Maintenance Generators (TMG), Module Pool programs, and ALV reports for sales and procurement analytics</li>
+          <li>Built foundational CDS views for real-time S/4HANA reporting and optimized Open SQL queries using ST05 and SE30</li>
+          <li>Authored reusable function modules, BAPIs, and validated OData endpoints via Postman; debugged short dumps using ST22 and Eclipse ADT</li>
+          <li>Delivered RICEFW objects including Adobe Forms, SAP Scripts, and Smart Forms for procurement and HR print outputs</li>
+        </ul>
+        <div class="tl-tags"><span class="tl-tag">DDIC</span><span class="tl-tag">TMG</span><span class="tl-tag">ALV Reports</span><span class="tl-tag">CDS Views</span><span class="tl-tag">RICEFW</span><span class="tl-tag">Adobe Forms</span><span class="tl-tag">ST05/ST22</span></div>
+      </div>
+    </div>
   </div>
-</div>
-<div id="sec-ai" class="sec">
-  <div class="card">
-    <div class="hdr"><div><span class="htitle">AI Stock Analyst - LM Studio</span><div style="font-size:10px;color:var(--color-text-secondary)">Qwen2.5 7B Instruct - 127.0.0.1:1234</div></div><span id="ai-status" class="badge b-nu">Disconnected</span></div>
-    <div id="ai-chat-box" style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:12px;min-height:220px;max-height:380px;overflow-y:auto;font-size:12px;line-height:1.7;margin-bottom:10px"><div style="color:var(--color-text-secondary)">Ask me anything - e.g. "Should I buy AAPL now?" or "Analyse NVDA risk".</div></div>
-    <div class="row" style="gap:6px"><div style="flex:1"><input type="text" id="ai-input" placeholder="Ask about stocks..." onkeydown="if(event.key==='Enter')sendAI()"></div><button class="btn" onclick="sendAI()">Send</button><button class="btn-s" onclick="aiContext()">Load context</button><button class="btn-s" onclick="clearAIChat()">Clear</button></div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"><button class="btn-s" onclick="aiQuick('Analyse current AAPL signals and give Buy/Hold/Sell')">AAPL analysis</button><button class="btn-s" onclick="aiQuick('Which Mag 7 stock looks strongest right now?')">Best Mag7</button><button class="btn-s" onclick="aiQuick('What is my portfolio risk level?')">Portfolio risk</button><button class="btn-s" onclick="aiQuick('Summarise today market news sentiment')">News summary</button></div>
+</section>
+
+<!-- ══ TOP 3 FEATURED PROJECTS ══ -->
+<section id="projects" class="section-wrap alt">
+  <div class="reveal">
+    <div class="sec-label">03 · Featured Work</div>
+    <h2 class="sec-title">Top 3 Projects</h2>
+    <div class="sec-divider"></div>
+    <p class="sec-sub">Each project below follows a clear Problem → Solution → Impact structure so you can see exactly what was solved and how.</p>
   </div>
-  <div class="card"><div class="htitle" style="margin-bottom:8px">LM Studio connection</div><div class="infobox"><strong>Server:</strong> http://127.0.0.1:1234<br><strong>Model:</strong> qwen2.5-7b-instruct (GGUF Q4_K_M - 4.68 GB)<br><strong>Token:</strong> sk-lm-s638fAhx:6OJ4Ll16GiRG6m3K9ptk<br><strong>Note:</strong> LM Studio must be running with Status: Running.</div><button class="btn" onclick="testLMStudio()">Test LM Studio connection</button><div id="lm-msg" class="email-test-result"></div></div>
-</div>
-<div id="sec-settings" class="sec">
-  <div class="card"><div class="htitle" style="margin-bottom:10px">EmailJS - service_3rss6un</div><div class="infobox"><strong>Service ID:</strong> service_3rss6un<br><strong>Template:</strong> template_oqicjpe<br><strong>To:</strong> saisantoshkumar29@gmail.com</div><div class="row"><div class="ig"><span class="il">Name</span><input type="text" id="cfgn" placeholder="Sai Santosh" value="Sai Santosh"></div><div class="ig"><span class="il">Reply-to email</span><input type="email" id="cfge" value="saisantoshkumar29@gmail.com"></div></div><div class="row"><button class="btn" onclick="saveSettings()">Save settings</button><button class="btn" onclick="testEmail()">Send test email</button></div><div id="smsg" class="email-test-result"></div></div>
-  <div class="card"><div class="htitle" style="margin-bottom:8px">Apify configuration</div><div class="infobox">Set your Apify API token to enable live news scraping from Yahoo Finance and X/Twitter.</div><div class="row"><div class="ig"><span class="il">Apify API token</span><input type="text" id="apify-token" placeholder="apify_api_xxxxxxxx"></div><button class="btn" style="margin-top:14px" onclick="saveApifyToken()">Save</button></div><div id="apify-save-msg" style="font-size:11px;margin-top:5px"></div></div>
-  <div class="card"><div class="htitle" style="margin-bottom:10px">Add custom stock</div><div class="row"><div class="ig"><span class="il">Ticker</span><input type="text" id="ct" placeholder="META"></div><div class="ig"><span class="il">Company name</span><input type="text" id="cn" placeholder="Meta Platforms"></div><button class="btn" onclick="addCustom()">Add &amp; fetch price</button></div><div id="cmsg" style="font-size:11px;margin-top:6px"></div></div>
-</div>
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<script src="js/data.js"></script>
-<script src="js/signals.js"></script>
-<script src="js/email.js"></script>
-<script src="js/apify.js"></script>
-<script src="js/lmstudio.js"></script>
-<script src="js/app.js"></script>
+
+  <div class="reveal" style="margin-bottom:1.5rem">
+    <div class="proj-card featured">
+      <div class="proj-banner" style="height:140px">
+        <svg class="banner-svg" viewBox="0 0 900 140" xmlns="http://www.w3.org/2000/svg">
+          <rect width="900" height="140" fill="#0a1628"/>
+          <line x1="0" y1="35" x2="900" y2="35" stroke="#0057b8" stroke-opacity=".07" stroke-width="1"/>
+          <line x1="0" y1="70" x2="900" y2="70" stroke="#0057b8" stroke-opacity=".07" stroke-width="1"/>
+          <line x1="0" y1="105" x2="900" y2="105" stroke="#0057b8" stroke-opacity=".07" stroke-width="1"/>
+          <rect x="50" y="20" width="50" height="100" rx="4" fill="#ef4444" fill-opacity=".3" stroke="#ef4444" stroke-opacity=".5" stroke-width="1"/>
+          <text x="75" y="15" fill="#ef4444" font-size="10" text-anchor="middle" font-family="monospace">12 min</text>
+          <text x="75" y="132" fill="#6b8299" font-size="9" text-anchor="middle" font-family="monospace">BEFORE</text>
+          <text x="135" y="75" fill="#60a5fa" font-size="18" text-anchor="middle">→</text>
+          <rect x="165" y="105" width="50" height="15" rx="4" fill="#22c55e" fill-opacity=".4" stroke="#22c55e" stroke-opacity=".6" stroke-width="1"/>
+          <text x="190" y="99" fill="#22c55e" font-size="10" text-anchor="middle" font-family="monospace">2 min</text>
+          <text x="190" y="132" fill="#22c55e" font-size="9" text-anchor="middle" font-family="monospace">AFTER</text>
+          <rect x="280" y="10" width="280" height="120" rx="6" fill="#0f1f38" stroke="#1e3f6e" stroke-width="1"/>
+          <circle cx="296" cy="24" r="4" fill="#ef4444" fill-opacity=".6"/><circle cx="309" cy="24" r="4" fill="#f59e0b" fill-opacity=".6"/><circle cx="322" cy="24" r="4" fill="#22c55e" fill-opacity=".6"/>
+          <text x="290" y="42" fill="#6b8299" font-size="8.5" font-family="monospace">@AbapCatalog.sqlViewName: 'ZPerf'</text>
+          <text x="290" y="55" fill="#fbbf24" font-size="8.5" font-family="monospace">define view ZPerf_CDS</text>
+          <text x="290" y="68" fill="#93c5fd" font-size="8.5" font-family="monospace">  as select from bkpf</text>
+          <text x="290" y="81" fill="#93c5fd" font-size="8.5" font-family="monospace">  association to bseg</text>
+          <text x="290" y="94" fill="#e2e8f0" font-size="8.5" font-family="monospace">  { key bkpf.belnr, _bseg }</text>
+          <line x1="288" y1="102" x2="552" y2="102" stroke="#1e3f6e" stroke-width="1" stroke-dasharray="3,2"/>
+          <rect x="288" y="106" width="264" height="18" rx="3" fill="#052e16"/><text x="296" y="118" fill="#4ade80" font-size="8" font-family="monospace" font-weight="bold">✓ Code pushdown · 83% faster · 40% less DB load</text>
+          <rect x="590" y="15" width="280" height="110" rx="6" fill="#0f1f38" stroke="#1e3f6e" stroke-width="1"/>
+          <text x="730" y="35" fill="#60a5fa" font-size="10" text-anchor="middle" font-family="monospace">Performance Gains</text>
+          <line x1="600" y1="42" x2="860" y2="42" stroke="#1e3f6e" stroke-width="1"/>
+          <text x="605" y="58" fill="#94a3b8" font-size="8.5" font-family="monospace">Report Runtime</text><text x="845" y="58" fill="#4ade80" font-size="8.5" font-family="monospace" text-anchor="end">−83%</text>
+          <text x="605" y="74" fill="#94a3b8" font-size="8.5" font-family="monospace">Posting Speed</text><text x="845" y="74" fill="#4ade80" font-size="8.5" font-family="monospace" text-anchor="end">+65%</text>
+          <text x="605" y="90" fill="#94a3b8" font-size="8.5" font-family="monospace">DB Load</text><text x="845" y="90" fill="#4ade80" font-size="8.5" font-family="monospace" text-anchor="end">−40%</text>
+          <text x="605" y="106" fill="#94a3b8" font-size="8.5" font-family="monospace">Records Processed</text><text x="845" y="106" fill="#fbbf24" font-size="8.5" font-family="monospace" text-anchor="end">1B+</text>
+        </svg>
+      </div>
+      <div class="proj-body">
+        <div class="proj-meta">
+          <div class="proj-cat">SAP · Performance Optimization · Enterprise</div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text3)">CVS Health, 2025</span>
+        </div>
+        <div class="proj-title">S/4HANA Performance Optimization — CDS Views &amp; HANA Pushdown</div>
+        <div class="psi">
+          <div class="psi-row"><span class="psi-label problem">Problem</span><span class="psi-text">Finance and procurement reports were taking up to 12 minutes to execute, causing major delays in month-end closing and PO approvals at CVS Health.</span></div>
+          <div class="psi-row"><span class="psi-label solution">Solution</span><span class="psi-text">Replaced nested Open SQL with CDS aggregation layers and AMDP-based HANA pushdown. Built ST05/SE30-profiled index strategies and modernized legacy ABAP report patterns across the FI and MM modules.</span></div>
+          <div class="psi-row"><span class="psi-label impact">Impact</span><span class="psi-text">Report runtime dropped from 12 min to under 2 min (83% reduction), posting speed improved by 65%, and overall database load reduced by 40% across systems processing 1B+ records.</span></div>
+        </div>
+        <div class="proj-metrics">
+          <span class="metric-tag green">83% faster reports</span>
+          <span class="metric-tag blue">65% faster posting</span>
+          <span class="metric-tag gold">40% DB load reduction</span>
+          <span class="metric-tag teal">1B+ records</span>
+        </div>
+        <div class="proj-stack"><span class="stk-tag">ABAP</span><span class="stk-tag">CDS Views</span><span class="stk-tag">AMDP</span><span class="stk-tag">HANA</span><span class="stk-tag">ST05</span><span class="stk-tag">SE30</span><span class="stk-tag">S/4HANA</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="featured-grid reveal">
+    <div class="proj-card ai-proj">
+      <div class="proj-banner">
+        <svg class="banner-svg" viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="160" fill="#0c0f1a"/>
+          <rect x="12" y="12" width="230" height="136" rx="6" fill="#0f1828" stroke="#1e3f6e" stroke-width="1"/>
+          <text x="127" y="28" fill="#6b8299" font-size="8" text-anchor="middle" font-family="monospace">MM/FI Anomaly Detection</text>
+          <line x1="24" y1="32" x2="233" y2="32" stroke="#1e3f6e" stroke-width="1"/>
+          <polyline points="24,108 55,100 86,104 117,95 148,100 179,91 210,96 233,92" fill="none" stroke="#0057b8" stroke-width="2"/>
+          <polygon points="24,108 55,100 86,104 117,95 148,100 179,91 210,96 233,92 233,136 24,136" fill="#0057b8" fill-opacity=".06"/>
+          <circle cx="117" cy="48" r="6" fill="#ef4444" fill-opacity=".8"/>
+          <text x="126" y="45" fill="#ef4444" font-size="7" font-family="monospace">ANOMALY</text>
+          <rect x="255" y="12" width="133" height="136" rx="6" fill="#0f1828" stroke="#c98a1a" stroke-opacity=".2" stroke-width="1"/>
+          <text x="321" y="30" fill="#c98a1a" font-size="8" text-anchor="middle" font-family="monospace">NLP Pipeline</text>
+          <rect x="263" y="42" width="110" height="16" rx="3" fill="#0057b8" fill-opacity=".1"/>
+          <text x="318" y="53" fill="#60a5fa" font-size="7.5" text-anchor="middle" font-family="monospace">TF-IDF Active</text>
+          <rect x="263" y="63" width="110" height="16" rx="3" fill="#c98a1a" fill-opacity=".1"/>
+          <text x="318" y="74" fill="#c98a1a" font-size="7.5" text-anchor="middle" font-family="monospace">50K rec/day</text>
+          <rect x="263" y="84" width="110" height="16" rx="3" fill="#22c55e" fill-opacity=".08"/>
+          <text x="318" y="95" fill="#4ade80" font-size="7.5" text-anchor="middle" font-family="monospace">35% less triage</text>
+        </svg>
+      </div>
+      <div class="proj-body">
+        <div class="proj-meta"><div class="proj-cat hybrid">SAP + AI · Analytics · Goldmine ⭐</div></div>
+        <div class="proj-title">SAP Data Insights — NLP Anomaly Detection</div>
+        <div class="psi">
+          <div class="psi-row"><span class="psi-label problem">Problem</span><span class="psi-text">Finance and MM modules were generating thousands of daily incidents requiring manual triage, causing alert fatigue and missed anomalies in SAP data.</span></div>
+          <div class="psi-row"><span class="psi-label solution">Solution</span><span class="psi-text">Built an end-to-end ML pipeline ingesting live SAP data via OData APIs. Isolation Forest and z-score detect anomalies while a TF-IDF NLP module auto-classifies incident tickets.</span></div>
+          <div class="psi-row"><span class="psi-label impact">Impact</span><span class="psi-text">Manual triage reduced by 35%, processing 50K+ records per day with 99.5% uptime across all SAP environments.</span></div>
+        </div>
+        <div class="proj-metrics"><span class="metric-tag blue">50K+ records/day</span><span class="metric-tag green">35% less triage</span><span class="metric-tag gold">99.5% uptime</span></div>
+        <div class="proj-stack"><span class="stk-tag">Python</span><span class="stk-tag">Scikit-learn</span><span class="stk-tag">TF-IDF</span><span class="stk-tag">Power BI</span><span class="stk-tag">SAP OData</span><span class="stk-tag">Azure DevOps</span></div>
+      </div>
+    </div>
+    <div class="proj-card ai-proj">
+      <div class="proj-banner">
+        <svg class="banner-svg" viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="160" fill="#0c0e16"/>
+          <circle cx="175" cy="83" r="30" fill="#c98a1a" fill-opacity=".07" stroke="#c98a1a" stroke-opacity=".35" stroke-width="1.5"/>
+          <text x="175" y="79" fill="#fbbf24" font-size="12" text-anchor="middle" font-family="Inter,sans-serif" font-weight="700">AI</text>
+          <text x="175" y="94" fill="#6b8299" font-size="7" text-anchor="middle" font-family="monospace">Agent</text>
+          <rect x="233" y="15" width="156" height="130" rx="6" fill="#0a1e14" stroke="#22c55e" stroke-opacity=".2" stroke-width="1"/>
+          <text x="311" y="32" fill="#4ade80" font-size="7.5" text-anchor="middle" font-family="monospace">Generated CDS</text>
+          <text x="241" y="52" fill="#0057b8" font-size="7" font-family="monospace">@AbapCatalog.sqlView</text>
+          <text x="241" y="64" fill="#fbbf24" font-size="7" font-family="monospace">  'ZMAT_PROC_VIEW'</text>
+          <text x="241" y="79" fill="#e2e8f0" font-size="7" font-family="monospace">define view ZMat_Proc</text>
+          <text x="241" y="136" fill="#4ade80" font-size="7" font-family="monospace">// auto-generated ✓</text>
+        </svg>
+      </div>
+      <div class="proj-body">
+        <div class="proj-meta"><div class="proj-cat hybrid">SAP + AI · Automation · Goldmine ⭐</div></div>
+        <div class="proj-title">AI-Assisted CDS View Generator</div>
+        <div class="psi">
+          <div class="psi-row"><span class="psi-label problem">Problem</span><span class="psi-text">Writing CDS views with correct annotations, associations, and Fiori-ready metadata is repetitive and error-prone, especially when working across dozens of SAP tables.</span></div>
+          <div class="psi-row"><span class="psi-label solution">Solution</span><span class="psi-text">A Python AI agent reads SAP table structures and auto-generates production-ready CDS code with annotations, associations, and @UI metadata, enforcing clean-core BTP best practices throughout.</span></div>
+          <div class="psi-row"><span class="psi-label impact">Impact</span><span class="psi-text">Dramatically cuts CDS development time, eliminates boilerplate errors, and ensures every generated view is Fiori-ready and BTP-compliant from the start.</span></div>
+        </div>
+        <div class="proj-metrics"><span class="metric-tag teal">Auto-generated code</span><span class="metric-tag blue">BTP clean-core</span></div>
+        <div class="proj-stack"><span class="stk-tag">Python</span><span class="stk-tag">AI Agent</span><span class="stk-tag">SAP CDS</span><span class="stk-tag">SAP BTP</span><span class="stk-tag">Automation</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reveal" style="margin-top:2rem;padding:1.5rem;background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+    <div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;color:var(--navy)">15+ More Projects Available</div>
+      <div style="font-size:.85rem;color:var(--text2);margin-top:.2rem">Including Stock Monitor Pro v7 (AI dashboard with LM Studio + Apify), CSC 699 Malware Detection (99.23% accuracy), Game of Life MPI Parallel, and more.</div>
+    </div>
+    <a href="https://github.com/dsaisantoshkumar" target="_blank" style="display:inline-flex;align-items:center;gap:.5rem;background:var(--blue2);color:#fff;padding:.7rem 1.4rem;border-radius:8px;font-size:.82rem;font-weight:600">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1C4.1 1 1 4.1 1 8c0 3.1 2 5.7 4.8 6.6.3.1.4-.1.4-.3v-1.1c-1.8.4-2.2-.9-2.2-.9-.3-.8-.8-1-1-.1-.6-.4 0-.4 0-.4.7.1 1 .7 1 .7.6 1 1.6.7 2 .5.1-.4.2-.7.4-.9-1.5-.2-3.2-.8-3.2-3.5 0-.8.3-1.4.7-1.9-.1-.2-.3-.9.1-1.8 0 0 .6-.2 2 .7.6-.2 1.2-.3 1.8-.3s1.2.1 1.8.3c1.4-.9 2-.7 2-.7.4.9.2 1.6.1 1.8.4.5.7 1.1.7 1.9 0 2.7-1.6 3.3-3.2 3.5.3.2.5.7.5 1.4v2.1c0 .2.1.4.4.3C13 13.7 15 11.1 15 8c0-3.9-3.1-7-7-7z" fill="#fff"/></svg>
+      View All on GitHub →
+    </a>
+  </div>
+</section>
+
+<!-- ══ CERTIFICATIONS ══ -->
+<section id="certifications" class="section-wrap">
+  <div class="reveal">
+    <div class="sec-label">04 · Credentials</div>
+    <h2 class="sec-title">Certifications</h2>
+    <div class="sec-divider"></div>
+  </div>
+  <div class="certs-grid">
+    <div class="cert-card reveal"><div class="cert-icon sap"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1.5L16.5 9L9 16.5L1.5 9Z" fill="none" stroke="#0057b8" stroke-width="1.8"/><circle cx="9" cy="9" r="2.5" fill="#0057b8" fill-opacity=".4"/></svg></div><div><div class="cert-name">ABAP RESTful Programming Model (RAP)</div><div class="cert-issuer">SAP</div><div class="cert-year">2024</div></div></div>
+    <div class="cert-card reveal"><div class="cert-icon sap"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1.5L16.5 9L9 16.5L1.5 9Z" fill="none" stroke="#0057b8" stroke-width="1.8"/><circle cx="9" cy="9" r="2.5" fill="#0057b8" fill-opacity=".4"/></svg></div><div><div class="cert-name">SAP Professional Fundamentals</div><div class="cert-issuer">SAP</div><div class="cert-year">2024</div></div></div>
+    <div class="cert-card reveal"><div class="cert-icon sap"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1.5L16.5 9L9 16.5L1.5 9Z" fill="none" stroke="#0057b8" stroke-width="1.8"/><circle cx="9" cy="9" r="2.5" fill="#0057b8" fill-opacity=".4"/></svg></div><div><div class="cert-name">SAP ABAP Fundamentals</div><div class="cert-issuer">SAP</div><div class="cert-year">2023</div></div></div>
+    <div class="cert-card reveal"><div class="cert-icon ai"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6" fill="none" stroke="#c98a1a" stroke-width="1.8"/><text x="9" y="13" fill="#c98a1a" font-size="8" text-anchor="middle" font-family="sans-serif" font-weight="bold">G</text></svg></div><div><div class="cert-name">Google AI Essentials</div><div class="cert-issuer">Google</div><div class="cert-year">2024</div></div></div>
+    <div class="cert-card reveal"><div class="cert-icon ai"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><polygon points="9,1.5 16.5,5.5 16.5,12.5 9,16.5 1.5,12.5 1.5,5.5" fill="none" stroke="#c98a1a" stroke-width="1.6"/><circle cx="9" cy="9" r="2.5" fill="#c98a1a" fill-opacity=".4"/></svg></div><div><div class="cert-name">LLM Knowledge Certification</div><div class="cert-issuer">AI / Generative AI</div><div class="cert-year">2024</div></div></div>
+    <div class="cert-card reveal"><div class="cert-icon ai"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><polygon points="9,1.5 16.5,5.5 16.5,12.5 9,16.5 1.5,12.5 1.5,5.5" fill="none" stroke="#c98a1a" stroke-width="1.6"/><circle cx="9" cy="9" r="2.5" fill="#c98a1a" fill-opacity=".4"/></svg></div><div><div class="cert-name">AI Agent Development</div><div class="cert-issuer">AI Automation</div><div class="cert-year">2024</div></div></div>
+    <div class="cert-card reveal"><div class="cert-icon data"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="7" width="4" height="9" rx="1" fill="#007a9e" fill-opacity=".4" stroke="#007a9e" stroke-width="1"/><rect x="7" y="4" width="4" height="12" rx="1" fill="#007a9e" fill-opacity=".6" stroke="#007a9e" stroke-width="1"/><rect x="12" y="1.5" width="4" height="14.5" rx="1" fill="#007a9e" stroke="#007a9e" stroke-width="1"/></svg></div><div><div class="cert-name">Discover the ART of Prompting</div><div class="cert-issuer">Generative AI</div><div class="cert-year">2024</div></div></div>
+    <div class="cert-card reveal"><div class="cert-icon data"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6.5" fill="none" stroke="#007a9e" stroke-width="1.5"/><text x="9" y="13" fill="#007a9e" font-size="7.5" text-anchor="middle" font-family="monospace" font-weight="bold">R</text></svg></div><div><div class="cert-name">R Programming</div><div class="cert-issuer">Data Science</div><div class="cert-year">2023</div></div></div>
+    <div class="cert-card reveal"><div class="cert-icon data"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="7" r="3.5" fill="none" stroke="#007a9e" stroke-width="1.5"/><path d="M5.5 12C5.5 10.3 13 10.3 13 12v3H5.5z" fill="#007a9e" fill-opacity=".25" stroke="#007a9e" stroke-width="1"/></svg></div><div><div class="cert-name">Introduction to AI</div><div class="cert-issuer">AI Academy</div><div class="cert-year">2023</div></div></div>
+    <div class="cert-card reveal"><div class="cert-icon data"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6" fill="none" stroke="#007a9e" stroke-width="1.5"/><line x1="9" y1="5.5" x2="9" y2="12.5" stroke="#007a9e" stroke-width="1.5"/><line x1="5.5" y1="9" x2="12.5" y2="9" stroke="#007a9e" stroke-width="1.5"/></svg></div><div><div class="cert-name">Build Website with AI</div><div class="cert-issuer">AI Web</div><div class="cert-year">2024</div></div></div>
+  </div>
+</section>
+
+<!-- ══ EDUCATION ══ -->
+<section id="education" class="section-wrap alt">
+  <div class="reveal">
+    <div class="sec-label">05 · Academic Background</div>
+    <h2 class="sec-title">Education</h2>
+    <div class="sec-divider"></div>
+  </div>
+  <div class="edu-grid">
+    <div class="edu-card reveal">
+      <div class="edu-badge">Graduate Degree</div>
+      <div class="edu-degree">MSc in Computer Science</div>
+      <div class="edu-uni">University of Southern Mississippi</div>
+      <div class="edu-year">2021 – 2023</div>
+      <div class="edu-decor"></div>
+    </div>
+    <div class="edu-card reveal">
+      <div class="edu-badge">Undergraduate Degree</div>
+      <div class="edu-degree">BSc in Computer Science, Mathematics &amp; Statistics</div>
+      <div class="edu-uni">Acharya Nagarjuna University</div>
+      <div class="edu-year">2017 – 2021</div>
+      <div class="edu-decor"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ══ -->
+<section id="contact" class="section-wrap">
+  <div class="reveal">
+    <div class="sec-label">06 · Get In Touch</div>
+    <h2 class="sec-title">Let's Work Together</h2>
+    <div class="sec-divider"></div>
+    <p class="sec-sub">Looking for an SAP BTP / ABAP consultant or an AI/ML engineer? Feel free to reach out directly.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-links reveal">
+      <a href="mailto:dsaisantoshkumar@gmail.com" class="contact-item"><div class="ci-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" stroke="#0057b8" stroke-width="1.4"/><polyline points="1,5 8,10 15,5" stroke="#0057b8" stroke-width="1.4" fill="none"/></svg></div><div><div class="ci-label">Email</div><div class="ci-val">dsaisantoshkumar@gmail.com</div></div></a>
+      <a href="tel:6019131606" class="contact-item"><div class="ci-icon" style="background:#f0fdf4;border-color:#bbf7d0"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 1.5h2.5L7 5 5.5 6.5c.8 1.8 2.2 3.2 4 4L11 9l3.5 1.5V13a1.5 1.5 0 01-1.5 1.5C5.5 14.5 1.5 10.5 1.5 4A1.5 1.5 0 013 2.5z" stroke="#1a7a40" stroke-width="1.4"/></svg></div><div><div class="ci-label">Phone</div><div class="ci-val">601-913-1606</div></div></a>
+      <a href="https://linkedin.com/in/santosh29" target="_blank" class="contact-item"><div class="ci-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="14" height="14" rx="3" stroke="#0057b8" stroke-width="1.4"/><line x1="4.5" y1="7" x2="4.5" y2="12" stroke="#0057b8" stroke-width="1.4"/><circle cx="4.5" cy="4.5" r="1" fill="#0057b8"/><path d="M7.5 7v5M7.5 9c0-1.5 5.5-2 5.5 0v3" stroke="#0057b8" stroke-width="1.4"/></svg></div><div><div class="ci-label">LinkedIn</div><div class="ci-val">linkedin.com/in/santosh29</div></div></a>
+      <a href="https://github.com/dsaisantoshkumar" target="_blank" class="contact-item"><div class="ci-icon" style="background:#fffbeb;border-color:#fde68a"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1C4.1 1 1 4.1 1 8c0 3.1 2 5.7 4.8 6.6.3.1.4-.1.4-.3v-1.1c-1.8.4-2.2-.9-2.2-.9-.3-.8-.8-1-1-.1-.6-.4 0-.4 0-.4.7.1 1 .7 1 .7.6 1 1.6.7 2 .5.1-.4.2-.7.4-.9-1.5-.2-3.2-.8-3.2-3.5 0-.8.3-1.4.7-1.9-.1-.2-.3-.9.1-1.8 0 0 .6-.2 2 .7.6-.2 1.2-.3 1.8-.3s1.2.1 1.8.3c1.4-.9 2-.7 2-.7.4.9.2 1.6.1 1.8.4.5.7 1.1.7 1.9 0 2.7-1.6 3.3-3.2 3.5.3.2.5.7.5 1.4v2.1c0 .2.1.4.4.3C13 13.7 15 11.1 15 8c0-3.9-3.1-7-7-7z" fill="#c98a1a"/></svg></div><div><div class="ci-label">GitHub</div><div class="ci-val">github.com/dsaisantoshkumar</div></div></a>
+      <a href="https://hackerrank.com/dsaisantoshkumar" target="_blank" class="contact-item"><div class="ci-icon" style="background:#f0f9ff;border-color:#bae6fd"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><polygon points="8,1.5 14.5,5 14.5,11 8,14.5 1.5,11 1.5,5" fill="none" stroke="#007a9e" stroke-width="1.4"/><text x="8" y="10" fill="#007a9e" font-size="6" text-anchor="middle" font-family="monospace" font-weight="bold">HR</text></svg></div><div><div class="ci-label">HackerRank</div><div class="ci-val">hackerrank.com/dsaisantoshkumar</div></div></a>
+      <div class="contact-item" style="cursor:default"><div class="ci-icon" style="background:#fffbeb;border-color:#fde68a"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="#c98a1a" stroke-width="1.4"/><path d="M8 2.5C8 2.5 6 5 6 8s2 5.5 2 5.5" stroke="#c98a1a" stroke-width="1" stroke-opacity=".5"/><line x1="2.5" y1="8" x2="13.5" y2="8" stroke="#c98a1a" stroke-width="1.4"/></svg></div><div><div class="ci-label">Location</div><div class="ci-val">Bentonville, AR, USA</div></div></div>
+    </div>
+    <div class="reveal">
+      <form class="contact-form" id="contactForm">
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Your Name</label><input class="form-input" type="text" id="from_name" name="from_name" placeholder="Your full name" required/></div>
+          <div class="form-group"><label class="form-label">Your Email</label><input class="form-input" type="email" id="from_email" name="from_email" placeholder="your@email.com" required/></div>
+        </div>
+        <div class="form-group"><label class="form-label">Subject</label><input class="form-input" type="text" id="subject" name="subject" placeholder="e.g. SAP Consulting Opportunity" required/></div>
+        <div class="form-group"><label class="form-label">Message</label><textarea class="form-input" id="message" name="message" rows="5" placeholder="Tell me about your project or opportunity..." required></textarea></div>
+        <div id="form-status"></div>
+        <button type="submit" class="btn-submit" id="submitBtn">Send Message →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-logo">Santosh<span>.</span></div>
+  <div class="footer-copy">© 2026 Sai Santosh Kumar Devarasetty · SAP BTP Consultant &amp; AI/ML Engineer</div>
+  <div class="footer-links">
+    <a href="https://github.com/dsaisantoshkumar" target="_blank">GitHub</a>
+    <a href="https://linkedin.com/in/santosh29" target="_blank">LinkedIn</a>
+    <a href="mailto:dsaisantoshkumar@gmail.com">Email</a>
+  </div>
+</footer>
+
+<script>
+// ── EmailJS
+const EMAILJS_PUBLIC_KEY  = 'fof2kfSPzOm-gRMrI';
+const EMAILJS_SERVICE_ID  = 'service_yxemoqc';
+const EMAILJS_TEMPLATE_ID = 'template_836mkd8';
+emailjs.init({publicKey:EMAILJS_PUBLIC_KEY});
+document.getElementById('contactForm').addEventListener('submit',async function(e){
+  e.preventDefault();
+  const btn=document.getElementById('submitBtn');
+  const status=document.getElementById('form-status');
+  btn.textContent='Sending…';btn.disabled=true;
+  status.className='sending';status.textContent='⟳ Sending your message…';
+  const params={from_name:document.getElementById('from_name').value,from_email:document.getElementById('from_email').value,subject:document.getElementById('subject').value,message:document.getElementById('message').value,to_email:'dsaisantoshkumar@gmail.com'};
+  try{
+    await emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,params);
+    status.className='success';status.textContent='✓ Message sent! Santosh will reply shortly.';
+    document.getElementById('contactForm').reset();
+  }catch(err){
+    status.className='error';status.textContent='✗ Failed to send. Please email: dsaisantoshkumar@gmail.com';
+  }finally{btn.textContent='Send Message →';btn.disabled=false;}
+});
+
+// ── Scroll reveal
+const reveals=document.querySelectorAll('.reveal');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*55)});
+},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+reveals.forEach(r=>obs.observe(r));
+
+// ── Nav scroll
+const nav=document.getElementById('mainNav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>40));
+
+// ── Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{e.preventDefault();document.querySelector(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth'});});
+});
+</script>
 </body>
-   </html>
+        </html>
